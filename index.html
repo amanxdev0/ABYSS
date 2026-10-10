@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ABYSS — a scroll-driven descent into the deep ocean</title>
+<meta name="description" content="ABYSS — scroll down through the five zones of the ocean, from sunlit waves to Challenger Deep at 10,911 metres. A cinematic WebGL film plays under the page as you scroll.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=1">
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
+</script>
+</head>
+<body>
+<canvas id="film" aria-hidden="true"></canvas>
+
+<div class="hud" aria-hidden="true">
+  <div class="hud-row">
+    <span class="hud-title">ABYSS</span>
+    <span class="hud-stop" id="hudZone">THE SURFACE</span>
+    <span class="hud-depth" id="hudDepth">0 m</span>
+    <span class="hud-fps" id="hudFps">-- FPS</span>
+  </div>
+  <div class="hud-track"><div class="hud-bar" id="hudBar"></div><div class="hud-knob" id="hudKnob"></div></div>
+</div>
+
+<main id="scrollRoot">
+  <section class="chapter" aria-label="Intro">
+    <div class="chapter-inner">
+      <p class="eyebrow">A scroll-driven descent</p>
+      <h1 class="mega">ABYSS</h1>
+      <p class="lede">From sunlit waves to the deepest point on Earth —<br>10,911 metres straight down. Scroll to dive.</p>
+      <p class="scroll-hint"><span class="scroll-hint-arrow">↓</span> scroll down to descend</p>
+    </div>
+  </section>
+
+  <section class="chapter" aria-label="The Surface">
+    <div class="chapter-inner">
+      <p class="eyebrow">Stop 1 · 0 m · Where it all begins</p>
+      <h2>The Surface</h2>
+      <p class="body-copy">Sunlight, waves, air. The ocean covers <strong>71% of Earth's surface</strong> and holds <strong>97% of all its water</strong> — and everything in the deep below starts right here, at the top.</p>
+      <div class="moons"><span class="moon-label">By the numbers</span><span class="moon-chip">71% of Earth's surface</span><span class="moon-chip">97% of Earth's water</span><span class="moon-chip">1.4 billion km³</span></div>
+    </div>
+  </section>
+
+  <section class="chapter" aria-label="Sunlight Zone">
+    <div class="chapter-inner">
+      <p class="eyebrow">Stop 2 · 0–200 m · Epipelagic</p>
+      <h2>The Sunlight Zone</h2>
+      <p class="body-copy">Where <strong>90% of ocean life</strong> lives. Light dies fast down here — red vanishes first, then orange, then yellow. By 200 metres, only blue remains, and photosynthesis becomes impossible.</p>
+      <div class="moons"><span class="moon-label">Residents</span><span class="moon-chip">Tuna</span><span class="moon-chip">Sea turtles</span><span class="moon-chip">Dolphins</span><span class="moon-chip">Coral reefs</span></div>
+      <p class="body-copy small-note">Almost every fish you've ever heard of lives in this thin sunlit skin — just the top 200 of nearly 11,000 metres.</p>
+    </div>
+  </section>
+
+  <section class="chapter" aria-label="Twilight Zone">
+    <div class="chapter-inner">
+      <p class="eyebrow">Stop 3 · 200–1,000 m · Mesopelagic</p>
+      <h2>The Twilight Zone</h2>
+      <p class="body-copy">The largest habitat on Earth by volume — and barely explored. Eyes grow enormous; many animals make their <strong>own light</strong>. Every night, trillions swim up to feed and sink back down — the <strong>largest migration on the planet</strong>, and it happens daily.</p>
+      <div class="moons"><span class="moon-label">Residents</span><span class="moon-chip">Lanternfish</span><span class="moon-chip">Bristlemouths</span><span class="moon-chip">Jellies</span></div>
+      <p class="body-copy small-note">Bristlemouths — tiny glowing fish — may be the most numerous vertebrates on Earth.</p>
+    </div>
+  </section>
+
+  <section class="chapter" aria-label="Midnight Zone">
+    <div class="chapter-inner">
+      <p class="eyebrow">Stop 4 · 1,000–4,000 m · Bathypelagic</p>
+      <h2>The Midnight Zone</h2>
+      <p class="body-copy">No sunlight has <strong>ever</strong> reached here. The water is 4°C and the pressure crushes toward <strong>400 atmospheres</strong>. Life cheats the darkness — three out of four animals down here can glow.</p>
+      <div class="moons"><span class="moon-label">Residents</span><span class="moon-chip">Anglerfish</span><span class="moon-chip">Gulper eel</span><span class="moon-chip">Vampire squid</span></div>
+      <p class="body-copy small-note">The anglerfish's famous lure glows with light from symbiotic bacteria — a living fishing rod.</p>
+    </div>
+  </section>
+
+  <section class="chapter" aria-label="The Abyss">
+    <div class="chapter-inner">
+      <p class="eyebrow">Stop 5 · 4,000–6,000 m · Abyssal</p>
+      <h2>The Abyss</h2>
+      <p class="body-copy">A near-freezing desert plain covering <strong>half the planet's surface</strong>. Food arrives as marine snow — the slow rain of the dead from above. But around hydrothermal vents, entire cities of life run on <strong>chemistry instead of sunlight</strong>.</p>
+      <div class="moons"><span class="moon-label">Residents</span><span class="moon-chip">Tripod fish</span><span class="moon-chip">Yeti crab</span><span class="moon-chip">Tube worms</span></div>
+      <p class="body-copy small-note">Black smokers blast water at 400°C — it never boils, because the pressure won't let it.</p>
+    </div>
+  </section>
+
+  <section class="chapter" aria-label="The Trench">
+    <div class="chapter-inner">
+      <p class="eyebrow">Stop 6 · 6,000–10,911 m · Hadal</p>
+      <h2>The Trench</h2>
+      <p class="body-copy">The <strong>Mariana Trench</strong> — a crescent gash 2,550 km long. At its bottom lies <strong>Challenger Deep</strong>, 10,911 metres down, under more than <strong>1,000 atmospheres</strong> of pressure. Only a few dozen humans have ever touched the bottom.</p>
+      <div class="moons"><span class="moon-label">Who went down</span><span class="moon-chip">Trieste · 1960</span><span class="moon-chip">Deepsea Challenger · 2012</span><span class="moon-chip">Limiting Factor · 2019</span></div>
+      <p class="body-copy small-note">Jacques Piccard &amp; Don Walsh first reached it in 1960; James Cameron went <em>solo</em> in 2012.</p>
+    </div>
+  </section>
+
+  <section class="chapter" aria-label="Finale">
+    <div class="chapter-inner">
+      <p class="eyebrow">Final stop · 10,911 m</p>
+      <h2 class="mega small">THE BOTTOM<br>OF THE WORLD</h2>
+      <p class="body-copy">You just fell further than Everest is tall — and lived. The deep ocean is Earth's last true wilderness: <strong>80% of it unmapped</strong>, millions of species still unknown.</p>
+      <p class="scroll-hint"><span class="scroll-hint-arrow">↑</span> scroll back up to surface</p>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p><strong>ABYSS</strong> — a scroll-driven descent through the ocean's five zones · every word real HTML</p>
+    <p class="fineprint">Built with Three.js on the SCROLLFILM interpolation engine · ocean facts: NOAA · <a href="https://amanxdev0.github.io/helios/">HELIOS</a> · <a href="https://amanxdev0.github.io/scrollfilm-3d/">SCROLLFILM</a></p>
+    <p class="fineprint">Crafted by <strong>Aman Singh</strong></p>
+  </footer>
+</main>
+
+<div class="nogl" id="nogl" hidden>
+  <p><strong>WebGL isn't available</strong> — the dive can't play, but every word above is still here, because it's real HTML.</p>
+</div>
+
+<script type="module" src="js/dive.js?v=1"></script>
+</body>
+</html>
