@@ -157,6 +157,49 @@ function makeAngler(x, y, z, s, phase) {
 makeAngler(18, -230, -12, 1.4, 0);
 makeAngler(-35, -285, 20, 1.0, 2.4);
 
+
+/* ---------------- giant whale (twilight zone) ---------------- */
+const whaleGroup = new THREE.Group();
+const whaleMats = [];
+let whaleTail;
+{
+  const silMat = new THREE.MeshBasicMaterial({ color: 0x0b1526, transparent: true, opacity: 0.92 });
+  silMat.userData.base = 0.92; whaleMats.push(silMat);
+  const body = new THREE.Mesh(new THREE.SphereGeometry(5, 24, 18), silMat);
+  body.scale.set(3.2, 1.0, 0.9);
+  whaleGroup.add(body);
+  /* tail stock + fluke on a pivot for the vertical fluke stroke */
+  whaleTail = new THREE.Group();
+  whaleTail.position.set(-15, 0.4, 0);
+  const stock = new THREE.Mesh(new THREE.BoxGeometry(7, 1.5, 1.1), silMat);
+  stock.position.set(-3.5, 0, 0);
+  whaleTail.add(stock);
+  const flukeL = new THREE.Mesh(new THREE.BoxGeometry(5.5, 0.6, 3.2), silMat);
+  flukeL.position.set(-8.5, 0.4, 1.9); flukeL.rotation.y = 0.5;
+  const flukeR = flukeL.clone(); flukeR.position.z = -1.9; flukeR.rotation.y = -0.5;
+  whaleTail.add(flukeL, flukeR);
+  whaleGroup.add(whaleTail);
+  /* pectoral fins */
+  for (const sz of [1, -1]) {
+    const fin = new THREE.Mesh(new THREE.BoxGeometry(6.5, 0.5, 2.4), silMat);
+    fin.position.set(2, -3.4, sz * 4.6);
+    fin.rotation.x = sz * 0.5; fin.rotation.z = -0.25;
+    whaleGroup.add(fin);
+  }
+  /* dorsal fin */
+  const dorsal = new THREE.Mesh(new THREE.ConeGeometry(1.4, 3.4, 6), silMat);
+  dorsal.position.set(-6, 5.6, 0); dorsal.rotation.z = 0.35;
+  whaleGroup.add(dorsal);
+  /* faint rim glow so the silhouette reads against the dark */
+  const rimMat = new THREE.SpriteMaterial({ map: glowTex, color: 0x2a6a9a, transparent: true, opacity: 0.18, blending: THREE.AdditiveBlending, depthWrite: false });
+  rimMat.userData.base = 0.18; whaleMats.push(rimMat);
+  const rim = new THREE.Sprite(rimMat);
+  rim.scale.set(46, 18, 1);
+  whaleGroup.add(rim);
+  whaleGroup.position.set(-150, -56, -18);
+  scene.add(whaleGroup);
+}
+
 /* ---------------- abyssal vent field ---------------- */
 const ventGroup = new THREE.Group();
 const ventMats = [];
@@ -258,6 +301,28 @@ const subMats = [];
 }
 scene.add(subGroup);
 
+
+/* ---------------- submersible bubble stream ---------------- */
+let bubblePts, bubbleBase, bubbleSpeed;
+const bubbleMats = [];
+{
+  const N = 60;
+  bubbleBase = new Float32Array(N * 3); bubbleSpeed = new Float32Array(N);
+  const pos = new Float32Array(N * 3);
+  for (let i = 0; i < N; i++) {
+    bubbleBase[i * 3] = 20 + rnd(-2.5, 2.5);
+    bubbleBase[i * 3 + 1] = rnd(-884, -862);
+    bubbleBase[i * 3 + 2] = 10 + rnd(-2.5, 2.5);
+    bubbleSpeed[i] = rnd(6, 13);
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  const bm = new THREE.PointsMaterial({ map: glowTex, color: 0x9fe8ff, size: 2.4, transparent: true, opacity: 0.7, blending: THREE.AdditiveBlending, depthWrite: false });
+  bm.userData.base = 0.7; bubbleMats.push(bm);
+  bubblePts = new THREE.Points(g, bm);
+  scene.add(bubblePts);
+}
+
 /* ---------------- bioluminescence ---------------- */
 let biolumMat;
 {
@@ -272,6 +337,40 @@ let biolumMat;
   g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
   biolumMat = new THREE.PointsMaterial({ color: 0x54f0ff, size: 2.0, transparent: true, opacity: 0.7, blending: THREE.AdditiveBlending, depthWrite: false });
   scene.add(new THREE.Points(g, biolumMat));
+}
+
+
+/* ---------------- bioluminescent plankton blooms ---------------- */
+const blooms = [];
+{
+  const bloomCols = [0x54f0ff, 0x7dffb0, 0xb49fff, 0x54f0ff, 0x7dffb0];
+  const spots = [[-60, -280, -40], [55, -350, 30], [-20, -430, -60], [70, -480, 10], [-45, -540, 50]];
+  spots.forEach(([x, y, z], bi) => {
+    const g = new THREE.Group();
+    const N = 36;
+    const pos = new Float32Array(N * 3);
+    for (let i = 0; i < N; i++) {
+      const r = 4 + Math.random() * 9;
+      const th = Math.random() * Math.PI * 2, ph = Math.acos(rnd(-1, 1));
+      pos[i * 3] = r * Math.sin(ph) * Math.cos(th);
+      pos[i * 3 + 1] = r * Math.cos(ph) * 0.7;
+      pos[i * 3 + 2] = r * Math.sin(ph) * Math.sin(th);
+    }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    const mt = new THREE.PointsMaterial({ map: glowTex, color: bloomCols[bi], size: 3.2, transparent: true, opacity: 0.8, blending: THREE.AdditiveBlending, depthWrite: false });
+    mt.userData.base = 0.8;
+    mt.userData.phase = bi * 1.7;
+    g.add(new THREE.Points(geo, mt));
+    const haloMat = new THREE.SpriteMaterial({ map: glowTex, color: bloomCols[bi], transparent: true, opacity: 0.16, blending: THREE.AdditiveBlending, depthWrite: false });
+    haloMat.userData.base = 0.16;
+    const halo = new THREE.Sprite(haloMat);
+    halo.scale.set(34, 22, 1);
+    g.add(halo);
+    g.position.set(x, y, z);
+    scene.add(g);
+    blooms.push({ g, mt, haloMat, dir: bi % 2 ? 1 : -1 });
+  });
 }
 
 /* ---------------- camera journey ----------------
@@ -370,9 +469,33 @@ function render(p, t) {
     a.lureMat.opacity = (0.7 + 0.3 * Math.sin(t * 4 + a.phase)) * eAng;
   });
 
+  /* giant whale — glides through the twilight zone */
+  const eWhale = env(p, 0.28, 0.34, 0.46, 0.54);
+  whaleGroup.visible = eWhale > 0.004;
+  whaleMats.forEach((mt) => { mt.opacity = mt.userData.base * eWhale; });
+  if (whaleGroup.visible) {
+    const wp = sstep(0.30, 0.52, p);
+    whaleGroup.position.x = lerp(-150, 150, wp);
+    whaleGroup.position.y = -56 + Math.sin(t * 0.5) * 2.5;
+    whaleGroup.rotation.z = Math.sin(t * 0.5 + 1) * 0.04;
+    whaleTail.rotation.z = Math.sin(t * 1.7) * 0.28;
+  }
+
   /* bioluminescence twinkle */
   const eBio = sstep(0.35, 0.5, p);
   biolumMat.opacity = eBio * (0.55 + 0.25 * Math.sin(t * 3));
+
+  /* plankton blooms — pulsing in the dark zones */
+  const eBloom = env(p, 0.42, 0.50, 0.70, 0.78);
+  blooms.forEach((b) => {
+    b.g.visible = eBloom > 0.004;
+    const pulse = 0.35 + 0.65 * Math.pow(0.5 + 0.5 * Math.sin(t * 2.2 + b.mt.userData.phase), 1.5);
+    b.mt.opacity = b.mt.userData.base * eBloom * pulse;
+    b.haloMat.opacity = b.haloMat.userData.base * eBloom * pulse;
+    b.g.rotation.y = t * 0.06 * b.dir;
+    const bs = 1 + 0.07 * Math.sin(t * 2.2 + b.mt.userData.phase);
+    b.g.scale.set(bs, bs, bs);
+  });
 
   /* vent field */
   const eVent = env(p, 0.58, 0.66, 0.74, 0.82);
@@ -401,6 +524,21 @@ function render(p, t) {
   subMats.forEach((mt) => { mt.opacity = mt.userData.base * eSub; });
   subGroup.position.y = -880 + Math.sin(t * 0.5) * 2;
   subGroup.rotation.y = Math.sin(t * 0.2) * 0.3;
+
+  /* bubble stream rising from the submersible */
+  const eBub = env(p, 0.80, 0.86, 0.96, 1.02);
+  bubblePts.visible = eBub > 0.004;
+  bubbleMats.forEach((mt) => { mt.opacity = mt.userData.base * eBub; });
+  {
+    const posAttr = bubblePts.geometry.attributes.position;
+    for (let k = 0; k < bubbleSpeed.length; k++) {
+      const y = -884 + ((bubbleBase[k * 3 + 1] + 884 + t * bubbleSpeed[k]) % 24);
+      posAttr.array[k * 3] = bubbleBase[k * 3] + Math.sin(t * 3 + k * 1.3) * 0.9;
+      posAttr.array[k * 3 + 1] = y;
+      posAttr.array[k * 3 + 2] = bubbleBase[k * 3 + 2] + Math.cos(t * 2.6 + k) * 0.9;
+    }
+    posAttr.needsUpdate = true;
+  }
 
   renderer.render(scene, camera);
   return { zone, depth };
