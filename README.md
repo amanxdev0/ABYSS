@@ -2,7 +2,7 @@
 
 A scroll-driven 3D descent through the five zones of the ocean — from sunlit waves to Challenger Deep at 10,911 metres. A cinematic WebGL "film" plays under the page as you scroll; every zone name and fact is real HTML.
 
-**Live:** https://amanxdev0.github.io/abyss/
+**Live:** https://amanxdev0.github.io/ABYSS/
 
 ## The voyage
 
