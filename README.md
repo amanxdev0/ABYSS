@@ -1,8 +1,20 @@
-# ABYSS
+<div align="center">
 
-A scroll-driven 3D descent through the five zones of the ocean — from sunlit waves to Challenger Deep at 10,911 metres. A cinematic WebGL "film" plays under the page as you scroll; every zone name and fact is real HTML.
+# 🌊 ABYSS
 
-**Live:** https://amanxdev0.github.io/ABYSS/
+**A scroll-driven 3D descent to the bottom of the ocean.**
+
+From sunlit waves to Challenger Deep at 10,911 metres — a cinematic WebGL "film" plays under the page as you scroll through the five zones of the ocean, while every zone name and fact on top is real HTML.
+
+[![live demo](https://img.shields.io/badge/demo-live-brightgreen?style=flat-square)](https://amanxdev0.github.io/abyss/)
+[![license](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE)
+[![three.js](https://img.shields.io/badge/three.js-%5E0.160.0-black?style=flat-square)](https://threejs.org/)
+
+[Live demo](https://amanxdev0.github.io/abyss/) · [Report a bug](https://github.com/amanxdev0/abyss/issues)
+
+</div>
+
+---
 
 ## The voyage
 
@@ -29,24 +41,35 @@ A scroll-driven 3D descent through the five zones of the ocean — from sunlit w
 
 Same SCROLLFILM interpolation architecture as [HELIOS](https://amanxdev0.github.io/helios/):
 
-- Fixed WebGL canvas under real HTML chapters; scroll position is the playhead
-- Frame-rate-independent damped interpolation (`1 − e^(−dt·k)`) — irregular scroll input drives smooth 40+ fps rendering
-- Chapter activation windows and camera stops are **measured from the real page layout**, so text and camera never drift apart
-- Adaptive pixel ratio (drops resolution if FPS sags, restores when it recovers)
-- `prefers-reduced-motion` and no-WebGL fallbacks
+1. **Fixed canvas, tall page** — the film is a `position: fixed` canvas; the page height *is* the timeline.
+2. **Scroll is the playhead** — one number, 0 → 1, drives the camera's descent, the fading light, and every creature's visibility.
+3. **Interpolation, not snapping** — the render loop eases toward the scroll target every frame with frame-rate-independent damping.
+4. **Real HTML on top** — zone chapters fade in/out by depth range.
 
-## Files
+## Run it
 
-- `index.html` — chapters, HUD, footer
-- `css/style.css` — deep-ocean theme, sticky chapter text, readability scrim
-- `js/dive.js` — the whole Three.js film (ES module, imports Three.js from CDN)
-
-## Run locally
+No video files, no build step — just open it:
 
 ```bash
 cd abyss
 python3 -m http.server 8000
-# open http://localhost:8000/
+# → http://localhost:8000
 ```
 
-Crafted by **Aman Singh**.
+Or via **GitHub Pages** (already live).
+
+## The Scroll Series
+
+Part of Aman Singh's scroll-driven cinematic universe — real HTML floating over live 3D films, where scroll is the playhead:
+
+- [SCROLLFILM](https://amanxdev0.github.io/scrollfilm-3d/) — the original cinematic WebGL film + full reverse-engineering breakdown
+- [HELIOS](https://amanxdev0.github.io/helios/) — scroll from the Milky Way to Pluto
+- [ABYSS](https://amanxdev0.github.io/abyss/) — descend through the five ocean zones to Challenger Deep
+- [EVENT HORIZON](https://amanxdev0.github.io/event-horizon/) — dive into the heart of a black hole
+- [RAMAYANA](https://amanxdev0.github.io/ramayana/) — a 3D flight through the Valmiki Ramayana
+
+Built with the [scrollfilm engine](https://github.com/amanxdev0/scrollfilm) — make your own.
+
+## License
+
+MIT © Aman Singh
