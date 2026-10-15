@@ -6,11 +6,11 @@
 
 From sunlit waves to Challenger Deep at 10,911 metres — a cinematic WebGL "film" plays under the page as you scroll through the five zones of the ocean, while every zone name and fact on top is real HTML.
 
-[![live demo](https://img.shields.io/badge/demo-live-brightgreen?style=flat-square)](https://amanxdev0.github.io/abyss/)
+[![live demo](https://img.shields.io/badge/demo-live-brightgreen?style=flat-square)](https://amanxdev0.github.io/ABYSS/)
 [![license](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE)
 [![three.js](https://img.shields.io/badge/three.js-%5E0.160.0-black?style=flat-square)](https://threejs.org/)
 
-[Live demo](https://amanxdev0.github.io/abyss/) · [Report a bug](https://github.com/amanxdev0/abyss/issues)
+[Live demo](https://amanxdev0.github.io/ABYSS/) · [Report a bug](https://github.com/amanxdev0/ABYSS/issues)
 
 </div>
 
@@ -64,7 +64,7 @@ Part of Aman Singh's scroll-driven cinematic universe — real HTML floating ove
 
 - [SCROLLFILM](https://amanxdev0.github.io/scrollfilm-3d/) — the original cinematic WebGL film + full reverse-engineering breakdown
 - [HELIOS](https://amanxdev0.github.io/helios/) — scroll from the Milky Way to Pluto
-- [ABYSS](https://amanxdev0.github.io/abyss/) — descend through the five ocean zones to Challenger Deep
+- [ABYSS](https://amanxdev0.github.io/ABYSS/) — descend through the five ocean zones to Challenger Deep
 - [EVENT HORIZON](https://amanxdev0.github.io/event-horizon/) — dive into the heart of a black hole
 - [RAMAYANA](https://amanxdev0.github.io/ramayana/) — a 3D flight through the Valmiki Ramayana
 
